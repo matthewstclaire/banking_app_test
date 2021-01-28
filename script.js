@@ -102,6 +102,12 @@ const createUsername = function (accounts) {
   });
 };
 
+const calcPrintBalance = function (movements) {
+  const balance = movements.reduce((acc, cur) => acc + cur, 0);
+  labelBalance.textContent = `${balance} EUR`;
+};
+calcPrintBalance(account1.movements);
+
 const deposits = movements.filter(function (mov) {
   return mov > 0;
 });
@@ -109,9 +115,5 @@ const deposits = movements.filter(function (mov) {
 const withdrawal = movements.filter(function (mov) {
   return mov < 0;
 });
-
-const balance = movements.reduce(function (acc, cur) {
-  return acc + cur;
-}, 0);
-
-console.log(balance);
+//reduce with arrow function
+// const balance = movements.reduce((acc, cur) => acc + cur, 0);
