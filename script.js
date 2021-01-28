@@ -92,15 +92,26 @@ console.log(movementsDescriptions);
 
 //username stuff
 
-const createUsername = function (user) {
-  const username = user
-    .toLowerCase()
-    .split(' ')
-    .map(name => name[0])
-    .join('');
-  return username;
+const createUsername = function (accounts) {
+  accounts.forEach(function (account) {
+    account.username = account.owner
+      .toLowerCase()
+      .split(' ')
+      .map(name => name[0])
+      .join('');
+  });
 };
 
-const user = 'Steven Thomas Williams';
+const deposits = movements.filter(function (mov) {
+  return mov > 0;
+});
 
-console.log(createUsername('Matthew St Claire'));
+const withdrawal = movements.filter(function (mov) {
+  return mov < 0;
+});
+
+const balance = movements.reduce(function (acc, cur) {
+  return acc + cur;
+}, 0);
+
+console.log(balance);
