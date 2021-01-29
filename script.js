@@ -104,7 +104,7 @@ const createUsername = function (accounts) {
 
 const calcPrintBalance = function (movements) {
   const balance = movements.reduce((acc, cur) => acc + cur, 0);
-  labelBalance.textContent = `${Math.abs(balance)}€`;
+  labelBalance.textContent = `${balance}€`;
 };
 
 const deposits = movements.filter(function (mov) {
@@ -133,8 +133,11 @@ const calcDisplaySummary = function (movements) {
     .reduce((acc, mov) => acc + mov, 0);
   labelSumOut.textContent = `${Math.abs(sumOut)}€`;
   //interest calc
-  const interestAdded = movements.reduce((acc, mov) => acc + mov, 0);
-  labelSumInterest.textContent = `${interestAdded * account1.interestRate}€`;
+  const interestAdded = movements
+    .filter(mov => mov > 0)
+    .map(deposit => (deposit * 1.2) / 100)
+    .reduce((acc, int) => acc + int, 0);
+  labelSumInterest.textContent = `${interestAdded}€`;
 };
 
 calcDisplaySummary(account1.movements);
