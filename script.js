@@ -74,7 +74,7 @@ const displayMovements = function (movements) {
   });
 };
 
-displayMovements(account1.movements);
+// displayMovements(account1.movements);
 
 const eurToUsd = 1.1;
 
@@ -88,8 +88,6 @@ const movementsDescriptions = movements.map((movement, index) => {
   }
 });
 
-console.log(movementsDescriptions);
-
 //username stuff
 
 const createUsername = function (accounts) {
@@ -101,6 +99,31 @@ const createUsername = function (accounts) {
       .join('');
   });
 };
+
+createUsername(accounts);
+
+//logging in functionality
+
+let currentAccount;
+
+btnLogin.addEventListener('click', function (e) {
+  e.preventDefault();
+  currentAccount = accounts.find(
+    acc => acc.username === inputLoginUsername.value
+  );
+  console.log(currentAccount);
+  if (currentAccount?.pin === Number(inputLoginPin.value)) {
+    labelWelcome.textContent = `Welcome back ${
+      currentAccount.owner.split(' ')[0]
+    }`;
+    containerApp.style.opacity = 100;
+    displayMovements(currentAccount.movements);
+    calcDisplaySummary(currentAccount.movements);
+    calcDisplayBalance(currentAccount.movements);
+  }
+});
+
+//displaying balance
 
 const calcPrintBalance = function (movements) {
   const balance = movements.reduce((acc, cur) => acc + cur, 0);
@@ -140,8 +163,8 @@ const calcDisplaySummary = function (movements) {
   labelSumInterest.textContent = `${interestAdded}€`;
 };
 
-calcDisplaySummary(account1.movements);
+// calcDisplaySummary(account1.movements);
 
-const account = accounts.find(acc => acc.owner === 'Jessica Davis');
+// const account = accounts.find(acc => acc.owner === 'Jessica Davis');
 //reduce with arrow function
 // const balance = movements.reduce((acc, cur) => acc + cur, 0)
