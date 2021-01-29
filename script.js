@@ -102,27 +102,6 @@ const createUsername = function (accounts) {
 
 createUsername(accounts);
 
-//logging in functionality
-
-let currentAccount;
-
-btnLogin.addEventListener('click', function (e) {
-  e.preventDefault();
-  currentAccount = accounts.find(
-    acc => acc.username === inputLoginUsername.value
-  );
-  console.log(currentAccount);
-  if (currentAccount?.pin === Number(inputLoginPin.value)) {
-    labelWelcome.textContent = `Welcome back ${
-      currentAccount.owner.split(' ')[0]
-    }`;
-    containerApp.style.opacity = 100;
-    displayMovements(currentAccount.movements);
-    calcDisplaySummary(currentAccount.movements);
-    calcDisplayBalance(currentAccount.movements);
-  }
-});
-
 //displaying balance
 
 const calcPrintBalance = function (movements) {
@@ -144,25 +123,49 @@ const totalDepositsUSD = movements
   .reduce((acc, mov) => acc + mov, 0);
 
 //display summary at bottom of page
-const calcDisplaySummary = function (movements) {
+const calcDisplaySummary = function (acc) {
   //In calc
-  const incomes = movements
+  const incomes = acc.movements
     .filter(mov => mov > 0)
     .reduce((acc, mov) => acc + mov, 0);
   labelSumIn.textContent = `${incomes}€`;
   //out calc
-  const sumOut = movements
+  const sumOut = acc.movements
     .filter(mov => mov < 0)
     .reduce((acc, mov) => acc + mov, 0);
   labelSumOut.textContent = `${Math.abs(sumOut)}€`;
   //interest calc
-  const interestAdded = movements
+  const interestAdded = acc.movements
     .filter(mov => mov > 0)
-    .map(deposit => (deposit * 1.2) / 100)
+    .map(deposit => (deposit * acc.interestRate) / 100)
     .reduce((acc, int) => acc + int, 0);
   labelSumInterest.textContent = `${interestAdded}€`;
 };
 
+//logging in functionality
+
+let currentAccount;
+
+btnLogin.addEventListener('click', function (e) {
+  e.preventDefault();
+  currentAccount = accounts.find(
+    acc => acc.username === inputLoginUsername.value
+  );
+  console.log(currentAccount);
+  if (currentAccount?.pin === Number(inputLoginPin.value)) {
+    labelWelcome.textContent = `Welcome back ${
+      currentAccount.owner.split(' ')[0]
+    }`;
+    containerApp.style.opacity = 100;
+    //
+    inputLoginUsername.value = inputLoginPin.value = '';
+    inputLoginPin.blur();
+
+    displayMovements(currentAccount.movements);
+    calcDisplaySummary(currentAccount);
+    calcPrintBalance(currentAccount.movements);
+  }
+});
 // calcDisplaySummary(account1.movements);
 
 // const account = accounts.find(acc => acc.owner === 'Jessica Davis');
