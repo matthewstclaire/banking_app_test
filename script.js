@@ -142,5 +142,6 @@ const calcDisplaySummary = function (movements) {
 
 calcDisplaySummary(account1.movements);
 
+const account = accounts.find(acc => acc.owner === 'Jessica Davis');
 //reduce with arrow function
 // const balance = movements.reduce((acc, cur) => acc + cur, 0)
