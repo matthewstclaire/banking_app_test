@@ -68,7 +68,7 @@ const displayMovements = function (movements) {
       index + 1
     } ${type}</div>
       <div class="movements__date">3 days ago</div>
-      <div class="movements__value">${movement}</div>
+      <div class="movements__value">${movement}€</div>
     </div>`;
     containerMovements.insertAdjacentHTML('afterbegin', html);
   });
@@ -82,9 +82,9 @@ const movementsUSD = movements.map(mov => mov * eurToUsd);
 
 const movementsDescriptions = movements.map((movement, index) => {
   if (movement > 0) {
-    return `Movement ${index + 1}: You deposited ${movement}`;
+    return `Movement ${index + 1}: You deposited ${movement}€`;
   } else {
-    return `Movement ${index + 1}: You withdrew ${Math.abs(movement)}`;
+    return `Movement ${index + 1}: You withdrew ${Math.abs(movement)}€`;
   }
 });
 
@@ -104,9 +104,8 @@ const createUsername = function (accounts) {
 
 const calcPrintBalance = function (movements) {
   const balance = movements.reduce((acc, cur) => acc + cur, 0);
-  labelBalance.textContent = `${balance} EUR`;
+  labelBalance.textContent = `${Math.abs(balance)}€`;
 };
-calcPrintBalance(account1.movements);
 
 const deposits = movements.filter(function (mov) {
   return mov > 0;
@@ -115,5 +114,30 @@ const deposits = movements.filter(function (mov) {
 const withdrawal = movements.filter(function (mov) {
   return mov < 0;
 });
+
+const totalDepositsUSD = movements
+  .filter(mov => mov > 0)
+  .map(mov => mov * eurToUsd)
+  .reduce((acc, mov) => acc + mov, 0);
+
+//display summary at bottom of page
+const calcDisplaySummary = function (movements) {
+  //In calc
+  const incomes = movements
+    .filter(mov => mov > 0)
+    .reduce((acc, mov) => acc + mov, 0);
+  labelSumIn.textContent = `${incomes}€`;
+  //out calc
+  const sumOut = movements
+    .filter(mov => mov < 0)
+    .reduce((acc, mov) => acc + mov, 0);
+  labelSumOut.textContent = `${Math.abs(sumOut)}€`;
+  //interest calc
+  const interestAdded = movements.reduce((acc, mov) => acc + mov, 0);
+  labelSumInterest.textContent = `${interestAdded * account1.interestRate}€`;
+};
+
+calcDisplaySummary(account1.movements);
+
 //reduce with arrow function
-// const balance = movements.reduce((acc, cur) => acc + cur, 0);
+// const balance = movements.reduce((acc, cur) => acc + cur, 0)
