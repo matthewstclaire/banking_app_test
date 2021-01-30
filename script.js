@@ -166,6 +166,16 @@ btnLogin.addEventListener('click', function (e) {
     calcPrintBalance(currentAccount.movements);
   }
 });
+
+btnTransfer.addEventListener('click', function (e) {
+  e.preventDefault();
+  const amount = Number(inputTransferAmount.value);
+  const receiverAccount = accounts.find(
+    acc => acc.username === inputTransferTo.value
+  );
+  console.log(amount, receiverAccount);
+});
+
 // calcDisplaySummary(account1.movements);
 
 // const account = accounts.find(acc => acc.owner === 'Jessica Davis');
